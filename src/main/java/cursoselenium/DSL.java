@@ -136,7 +136,7 @@ public class DSL {
 		Alert alert = driver.switchTo().alert();
 		return alert.getText();
 	}
-	
+		
 	public String alertaObterTextoEAceita(){
 		Alert alert = driver.switchTo().alert();
 		String valor = alert.getText();
@@ -144,7 +144,6 @@ public class DSL {
 		return valor;
 		
 	}
-	
 	public String alertaObterTextoENega(){
 		Alert alert = driver.switchTo().alert();
 		String valor = alert.getText();
