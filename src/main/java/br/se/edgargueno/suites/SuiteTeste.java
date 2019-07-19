@@ -1,4 +1,4 @@
-package nr.se.edgargueno.suites;
+package br.se.edgargueno.suites;
 import static br.se.edgargueno.core.DriverFactory.killDriver;
 
 import org.junit.AfterClass;
