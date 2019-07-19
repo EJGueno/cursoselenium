@@ -1,75 +1,61 @@
 package cursoselenium;
 
+import static br.se.edgargueno.core.DriverFactory.getDriver;
+import static br.se.edgargueno.core.DriverFactory.killDriver;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+
+import br.se.edgargueno.core.DSL;
 
 public class TesteAlert {
 	
-	private WebDriver driver;
+	private DSL dsl;
 	
 	@Before
 	public void inicializa() {
-		System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver.exe");
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		getDriver().get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
 				
 	}
 	@After
 	public void Finaliza() {
 
-		driver.quit();
+		killDriver();
 	}
 	
 	@Test
 	public void devInterragirComAlertSimples() {
 			
-		driver.findElement(By.id("alert")).click();
-		Alert alert = driver.switchTo().alert();
-		String texto = alert.getText();
+		dsl.clicarBotao("alert");
+		String texto = dsl.alertaObterTextoEAceita(); 
 		Assert.assertEquals("Alert Simples", texto);
-		alert.accept();
-		
-		driver.findElement(By.id("elementosForm:nome")).sendKeys(texto);
+		dsl.escrever("elementosForm:nome", texto);
 	
 	}
 	
 	@Test
 	public void devInterragirComAlertConfirme() {
 	
-		driver.findElement(By.id("confirm")).click();
-		Alert alert = driver.switchTo().alert();
-		alert.accept();
-		Assert.assertEquals("Confirmado", alert.getText());
-		alert.accept();
+		dsl.clicarBotao("confirm");
+		Assert.assertEquals("Confirm Simples", dsl.alertaObterTextoEAceita());
+		Assert.assertEquals("Confirmado", dsl.alertaObterTextoEAceita());
 		
-		driver.findElement(By.id("confirm")).click();
-		Alert alert1 = driver.switchTo().alert();
-		alert1.dismiss();
-		Assert.assertEquals("Negado", alert1.getText());
-		alert1.accept();
+		dsl.clicarBotao("confirm");
+		Assert.assertEquals("Confirm Simples", dsl.alertaObterTextoENega());
+		Assert.assertEquals("Negado", dsl.alertaObterTextoENega());
 
 	}
 	
 	@Test
 	public void devInterragirComAlertPrompt() {
 
-
-		driver.findElement(By.id("prompt")).click();
-		Alert alerta = driver.switchTo().alert();
-		Assert.assertEquals("Digite um numero", alerta.getText());
-		alerta.sendKeys("12");
-		alerta.accept();
-		Assert.assertEquals("Era 12?", alerta.getText());
-		alerta.accept();
-		Assert.assertEquals(":D", alerta.getText());
-		alerta.accept();
+		dsl.clicarBotao("prompt");
+		Assert.assertEquals("Digite um numero", dsl.alertaObterTexto());
+		dsl.alertaEscrever("12");
+		Assert.assertEquals("Era 12?", dsl.alertaObterTextoEAceita());
+		Assert.assertEquals(":D", dsl.alertaObterTextoEAceita());
 
 	}
 			

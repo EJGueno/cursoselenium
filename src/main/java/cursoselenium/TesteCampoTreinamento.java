@@ -1,5 +1,8 @@
 package cursoselenium;
 
+import static br.se.edgargueno.core.DriverFactory.getDriver;
+import static br.se.edgargueno.core.DriverFactory.killDriver;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,32 +11,25 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import br.se.edgargueno.core.DSL;
+
 public class TesteCampoTreinamento {
-	
-	private WebDriver driver;
-	
+		
 	private DSL dsl;
 	
 	@Before
 	public void inicializa() {
-		System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver.exe");
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
-		dsl = new DSL(driver);
+		getDriver().get("file:///" + System.getProperty("user.dir") + "/src/main/resources/componentes.html");
+		dsl = new DSL();
 		
-				
 	}
 	
 	@After
 	public void Finaliza() {
-
-		driver.quit();
+		killDriver();
 	}
 	
 	@Test
@@ -54,8 +50,8 @@ public class TesteCampoTreinamento {
 	@Test
 	public void deveInteragirComRadioButton() {
 		
-		driver.findElement(By.id("elementosForm:sexo:0")).click();
-		Assert.assertTrue(driver.findElement(By.id("elementosForm:sexo:0")).isSelected());
+		getDriver().findElement(By.id("elementosForm:sexo:0")).click();
+		Assert.assertTrue(getDriver().findElement(By.id("elementosForm:sexo:0")).isSelected());
 
 	}	
 	
@@ -77,8 +73,8 @@ public class TesteCampoTreinamento {
 	@Test
 	public void deveVerificarValorescombobox() {
 		
-		driver.manage().window().maximize();
-		WebElement element = driver.findElement(By.id("elementosForm:escolaridade"));
+		getDriver().manage().window().maximize();
+		WebElement element = getDriver().findElement(By.id("elementosForm:escolaridade"));
 		Select combo = new Select(element);
 		List<WebElement> options = combo.getOptions();
 		Assert.assertEquals(8, options.size());
@@ -114,7 +110,7 @@ public class TesteCampoTreinamento {
 	@Test
 	public void deveInteragirBotoes() {
 		dsl.clicarBotao("buttonSimple");
-		WebElement botao = driver.findElement(By.id("buttonSimple"));
+		WebElement botao = getDriver().findElement(By.id("buttonSimple"));
 		botao.click();
 		
 		Assert.assertEquals("Obrigado!", botao.getAttribute("value"));
@@ -133,7 +129,7 @@ public class TesteCampoTreinamento {
 	@Test
 	public void deveBuscarTextoNaPagina() {
 				
-//		Assert.assertTrue(driver.findElement(By.tagName("body"))
+//		Assert.assertTrue(getDriver().findElement(By.tagName("body"))
 //		.getText().contains("Campo de Treinamento"));
 		
 		Assert.assertEquals("Campo de Treinamento", dsl.obterTexto(By.tagName("h3")));
